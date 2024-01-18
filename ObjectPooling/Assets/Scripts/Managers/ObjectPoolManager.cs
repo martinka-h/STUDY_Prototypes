@@ -140,13 +140,6 @@ public class ObjectPoolManager : MonoBehaviour {
         return go;
     }
 
-    private GameObject InstantiateGameObject(GameObject prefab, Transform parentTransform, bool setActive)
-    {
-        GameObject go = InstantiateGameObject(prefab, parentTransform.position, parentTransform.rotation, setActive);
-        go.transform.SetParent(parentTransform);
-        return go;
-    }
-
     private Queue<GameObject> GetPool(GameObject prefab)
     {
         if (_pool.TryGetValue(prefab.BaseName(), out var pool)) {
