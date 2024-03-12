@@ -29,7 +29,7 @@ namespace FirstPersonController {
         [SerializeField] private float upDownRange = 80.0f;
 
         [Header("Movement sounds")]
-        [SerializeField] private AudioSource audioSource;
+        private AudioSource audioSource;
         [SerializeField] private AudioClip[] footstepSounds;
         [SerializeField] private AudioClip jumpSound;
         private float velocityThreshold = 2.0f;
@@ -48,6 +48,7 @@ namespace FirstPersonController {
         {
             characterController = GetComponent<CharacterController>();
             mainCamera = Camera.main;
+            audioSource = GetComponent<AudioSource>();
 
             moveAction = playerControls.FindActionMap("Player").FindAction("Move");
             lookAction = playerControls.FindActionMap("Player").FindAction("Look");
@@ -65,6 +66,8 @@ namespace FirstPersonController {
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+
+            FPReticle.CreateReticle(); //delete this line if you do not want the reticle to appear. 
         }
 
         private void OnEnable()
