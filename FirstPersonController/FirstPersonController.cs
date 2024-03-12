@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Movement {
+namespace FirstPersonController {
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(AudioSource))]
     public class FirstPersonController : MonoBehaviour {
