@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 
 namespace Movement {
     [RequireComponent(typeof(CharacterController))]
+    [RequireComponent(typeof(AudioSource))]
     public class FirstPersonController : MonoBehaviour {
 
         [Header("Input actions")]
@@ -27,9 +28,10 @@ namespace Movement {
         [SerializeField] private float mouseSensitivity = 2.0f;
         [SerializeField] private float upDownRange = 80.0f;
 
-        [Header("Footstep sounds")]
-        [SerializeField] private AudioSource footstepSource;
+        [Header("Movement sounds")]
+        [SerializeField] private AudioSource audioSource;
         [SerializeField] private AudioClip[] footstepSounds;
+        [SerializeField] private AudioClip jumpSound;
         private float velocityThreshold = 2.0f;
         private float walkStepInterval = 0.5f;
         private float sprintStepInterval = 0.3f;
@@ -114,6 +116,8 @@ namespace Movement {
                 currentMovement.y = -0.5f;
                 if (jumpAction.triggered) {
                     currentMovement.y = jumpForce;
+                    audioSource.clip = jumpSound;
+                    audioSource.Play();
                 }
             } else {
                 currentMovement.y -= gravity * Time.deltaTime;
@@ -149,8 +153,8 @@ namespace Movement {
         {
             int randomIndexx = footstepSounds.Length == 1 ? 0 : Random.Range(0, footstepSounds.Length - 1);
 
-            footstepSource.clip = footstepSounds[randomIndexx];
-            footstepSource.Play();
+            audioSource.clip = footstepSounds[randomIndexx];
+            audioSource.Play();
         }
         #endregion
     }
