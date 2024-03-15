@@ -66,8 +66,6 @@ namespace FirstPersonController {
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-
-            FPReticle.CreateReticle(); //delete this line if you do not want the reticle to appear. 
         }
 
         private void OnEnable()

@@ -7,7 +7,6 @@ namespace FirstPersonController {
         private void Start()
         {
             GameObject firstPersonReticle = new GameObject("UI - First Person Reticle", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
-            firstPersonReticle.name = "UI - First Person Reticle";
 
             Canvas canvas = firstPersonReticle.GetComponent<Canvas>();
             CanvasScaler canvasScaler = firstPersonReticle.GetComponent<CanvasScaler>();
@@ -20,7 +19,7 @@ namespace FirstPersonController {
             GameObject reticleImage = new GameObject("UI Reticle", typeof(Image));
             reticleImage.transform.SetParent(firstPersonReticle.transform, false);
             reticleImage.GetComponent<Image>().rectTransform.sizeDelta = new Vector2(10,10);
-            reticleImage.GetComponent<Image>().sprite = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd"); ;
+            reticleImage.GetComponent<Image>().sprite = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
         }
     }
 }
