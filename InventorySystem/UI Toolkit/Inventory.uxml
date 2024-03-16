@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/InventoryStyle.uss?fileID=7433441132597879392&amp;guid=cced49a533ab31542bb726deef47f25b&amp;type=3#InventoryStyle" />
+    <ui:VisualElement name="CategoriesMenu" style="flex-grow: 1; flex-direction: row; min-height: 100px; height: 100px; max-height: 100px; align-self: center; padding-top: 10px; padding-bottom: 20px; display: flex;">
+        <ui:Button text="0" parse-escape-sequences="true" display-tooltip-when-elided="true" name="HomeBtn" style="width: 300px;" />
+        <ui:Button text="1" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Tab1Btn" style="width: 300px;" />
+        <ui:Button text="2" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Tab2Btn" style="width: 300px;" />
+        <ui:Button text="3" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Tab3Btn" style="width: 300px;" />
+    </ui:VisualElement>
+    <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="ScrollView">
+        <ui:VisualElement name="Tab0" style="flex-grow: 1; position: relative; display: flex; flex-direction: row; flex-wrap: wrap;" />
+        <ui:VisualElement name="Tab1" style="flex-grow: 1; position: relative; display: flex; flex-direction: row; flex-wrap: wrap;" />
+        <ui:VisualElement name="Tab2" style="flex-grow: 1; position: relative; display: flex; flex-direction: row; flex-wrap: wrap;" />
+        <ui:VisualElement name="Tab3" style="flex-grow: 1; position: relative; display: flex; flex-direction: row; flex-wrap: wrap;" />
+    </ui:ScrollView>
+</ui:UXML>

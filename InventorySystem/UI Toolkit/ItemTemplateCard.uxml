@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Button text="Button" parse-escape-sequences="true" display-tooltip-when-elided="true" tabindex="0" focusable="false" style="padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; width: 350px; height: 450px;">
+        <ui:VisualElement name="ItemImage" style="flex-grow: 1; width: 250px; height: 300px; position: absolute; align-self: center; justify-content: space-around; align-items: center; flex-direction: row; background-color: rgba(211, 39, 39, 0.75); top: 78px; left: 51px;" />
+    </ui:Button>
+    <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ItemPrice" style="transform-origin: right bottom; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 20px; padding-bottom: 20px; padding-left: 0; position: absolute; bottom: 0; right: 0; font-size: 25px; width: 109px; -unity-text-align: upper-right; height: 53px;" />
+    <ui:Label tabindex="10" text="Item display name" parse-escape-sequences="true" display-tooltip-when-elided="true" name="DisplayName" style="position: absolute; align-self: flex-start; margin-top: 15px; margin-bottom: 15px; font-size: 20px;" />
+</ui:UXML>
