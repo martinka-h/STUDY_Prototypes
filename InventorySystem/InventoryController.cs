@@ -1,51 +1,52 @@
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEditor.Progress;
 
 namespace Inventory {
     public class InventoryController : MonoBehaviour {
 
         //remember to assign your Panel Settings in the Game Assets prefab.
-        private VisualTreeAsset inventoryCardTemplate;
 
+        //UI Files
+        private VisualTreeAsset inventoryCardTemplate;
         private VisualElement activeTab;
         private VisualElement homeTab;
         private VisualElement tab1;
         private VisualElement tab2;
         private VisualElement tab3;
 
-        private void Start()
+        private GameObject inventory;
+        private UIDocument uiDocument;
+        
+        private void Awake()
         {
-            GameObject inventory = new GameObject("UI - Inventory", typeof(UIDocument));
+            inventory = new GameObject("UI - Inventory", typeof(UIDocument));
             inventoryCardTemplate = GameAssets.Instance.inventoryItemCard;
 
-            UIDocument uiDocument = inventory.GetComponent<UIDocument>();
+            uiDocument = inventory.GetComponent<UIDocument>();
             uiDocument.panelSettings = GameAssets.Instance.inventorySystem;
             uiDocument.visualTreeAsset = GameAssets.Instance.inventoryLayout;
 
             // assign functions to buttons
 
             Button homeBtn = uiDocument.rootVisualElement.Q<Button>("HomeBtn");
-            homeBtn.RegisterCallback<ClickEvent>(GoToHome);
+            homeBtn.RegisterCallback<ClickEvent>(evt => GoToTab(homeTab));
 
             Button tab1Btn = uiDocument.rootVisualElement.Q<Button>("Tab1Btn");
-            tab1Btn.RegisterCallback<ClickEvent>(GoToTab1);
+            tab1Btn.RegisterCallback<ClickEvent>(evt => GoToTab(tab1));
 
             Button tab2Btn = uiDocument.rootVisualElement.Q<Button>("Tab2Btn");
-            tab2Btn.RegisterCallback<ClickEvent>(GoToTab2);
+            tab2Btn.RegisterCallback<ClickEvent>(evt => GoToTab(tab2));
 
             Button tab3Btn = uiDocument.rootVisualElement.Q<Button>("Tab3Btn");
-            tab3Btn.RegisterCallback<ClickEvent>(GoToTab3);
+            tab3Btn.RegisterCallback<ClickEvent>(evt => GoToTab(tab3));
 
             // define the tabs
-
             homeTab = uiDocument.rootVisualElement.Q("Tab0");
             tab1 = uiDocument.rootVisualElement.Q("Tab1");
             tab2 = uiDocument.rootVisualElement.Q("Tab2");
             tab3 = uiDocument.rootVisualElement.Q("Tab3");
 
             // populate the tabs with items of the right category
-
             foreach (Item item in GameAssets.Instance.items1) {
                 InventoryItem newItem = new InventoryItem(item, inventoryCardTemplate);
                 tab1.Add(newItem.itemCard);
@@ -62,8 +63,7 @@ namespace Inventory {
             }
 
 
-            // define the active tab
-
+            // set the active tab
             homeTab.style.display = DisplayStyle.Flex;
             tab1.style.display = DisplayStyle.None;
             tab2.style.display = DisplayStyle.None;
@@ -72,34 +72,24 @@ namespace Inventory {
             activeTab = homeTab;
         }
 
-        #region On Click Methods
-        public void GoToHome(ClickEvent evt)
+        private void Update()
         {
-            activeTab.style.display = DisplayStyle.None;
-            homeTab.style.display = DisplayStyle.Flex;
-            activeTab = homeTab;
+            if (Input.GetKeyDown(KeyCode.Tab)) {
+                ToggleInventoryView();
+            }
         }
 
-        private void GoToTab1(ClickEvent evt)
+        public void GoToTab(VisualElement selectedTab)
         {
             activeTab.style.display = DisplayStyle.None;
-            tab1.style.display = DisplayStyle.Flex;
-            activeTab = tab1;
+            selectedTab.style.display = DisplayStyle.Flex;
+            activeTab = selectedTab;
         }
 
-        private void GoToTab2(ClickEvent evt)
+        public void ToggleInventoryView()
         {
-            activeTab.style.display = DisplayStyle.None;
-            tab2.style.display = DisplayStyle.Flex;
-            activeTab = tab2;
+            uiDocument.rootVisualElement.style.display = uiDocument.rootVisualElement.style.display == DisplayStyle.None ? DisplayStyle.Flex : DisplayStyle.None;
+            GoToTab(homeTab);
         }
-
-        private void GoToTab3(ClickEvent evt)
-        {
-            activeTab.style.display = DisplayStyle.None;
-            tab3.style.display = DisplayStyle.Flex;
-            activeTab = tab3;
-        }
-        #endregion
     }
 }
