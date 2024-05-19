@@ -10,6 +10,7 @@ namespace CameraSystem {
         [SerializeField] private float rotateSpeed = 50f;
         [SerializeField] private int edgeScrollSize = 10;
         [SerializeField] private float dragPanSpeed = 0.2f;
+        [SerializeField] private float zoomSpeed = 5f;
 
         [SerializeField] private bool useEdgeScrolling;
         [SerializeField] private bool allowRotation;
@@ -52,7 +53,7 @@ namespace CameraSystem {
             }
 
             if (allowZoom) {
-                HandleCameraZoom();
+                HandleCameraZoom_FieldOfView();
             }
         }
 
@@ -81,7 +82,7 @@ namespace CameraSystem {
         private void HandleEdgeScrolling()
         {
             if (dragPanActive) return;
-    
+
             Vector3 inputDir = new Vector3(0, 0, 0);
 
             if (Input.mousePosition.x < edgeScrollSize) inputDir.x = -1f;
@@ -119,7 +120,7 @@ namespace CameraSystem {
             transform.position += moveDir * moveSpeed * Time.deltaTime;
         }
 
-        private void HandleCameraZoom()
+        private void HandleCameraZoom_FieldOfView()
         {
             if (Input.mouseScrollDelta.y > 0) {
                 targetFieldOfView += 5;
@@ -131,7 +132,7 @@ namespace CameraSystem {
 
             targetFieldOfView = Mathf.Clamp(targetFieldOfView, fovMin, fovMax);
 
-            virtualCamera.m_Lens.FieldOfView = targetFieldOfView;
+            virtualCamera.m_Lens.FieldOfView = Mathf.Lerp(virtualCamera.m_Lens.FieldOfView, targetFieldOfView, Time.deltaTime * zoomSpeed);
         }
     }
 }
