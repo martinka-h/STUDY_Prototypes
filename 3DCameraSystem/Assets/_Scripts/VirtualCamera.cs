@@ -3,7 +3,8 @@ using Cinemachine;
 using static Cinemachine.CinemachineTransposer;
 
 // Make sure that the Cinemachine camera prefab has "Save During Play" enabled.
-// The changes transposer will be made only if transposer is already present.
+// The changes to transposer will be made only if transposer is already present.
+
 
 namespace CameraSystem {
     public class VirtualCamera : MonoBehaviour {
@@ -13,7 +14,7 @@ namespace CameraSystem {
 
             // Set camera follow and lookat if empty
             if (camera.Follow == null) {
-                Transform cameraSystem = new GameObject("CameraSystem").transform;
+                Transform cameraSystem = new GameObject("CameraSystem", typeof (CameraSystem)).transform;
                 camera.Follow = cameraSystem;
                 camera.LookAt = cameraSystem;
             }    
