@@ -1,19 +1,39 @@
+using Cinemachine;
 using UnityEngine;
 
 namespace CameraSystem {
     public class CameraSystem : MonoBehaviour {
+
+        [SerializeField] private CinemachineVirtualCamera virtualCamera;
 
         [SerializeField] private float moveSpeed = 50f;
         [SerializeField] private float rotateSpeed = 50f;
         [SerializeField] private int edgeScrollSize = 10;
         [SerializeField] private float dragPanSpeed = 0.2f;
 
-        [SerializeField] private bool useEdgeScrolling = true;
-        [SerializeField] private bool allowRotation = true;
-        [SerializeField] private bool useDragPan = true;
+        [SerializeField] private bool useEdgeScrolling;
+        [SerializeField] private bool allowRotation;
+        [SerializeField] private bool useDragPan;
+        [SerializeField] private bool allowZoom;
 
         private bool dragPanActive = false;
         private Vector2 lastMousePosition;
+
+        [SerializeField] private int fovMax = 50;
+        [SerializeField] private int fovMin = 10;
+        private float targetFieldOfView = 30;
+
+        private void Start()
+        {
+            if (virtualCamera == null) {
+                Debug.Log("The reference for virtualCamera is empty. Remember to assign it in the inspector.\nSearching for CinemacineVirtualCamera in scene.");
+                virtualCamera = FindAnyObjectByType<CinemachineVirtualCamera>();
+            }
+
+            if (virtualCamera == null) {
+                Debug.Log("CinemachineVirtualCamera not found.");
+            }
+        }
 
         private void Update()
         {
@@ -29,6 +49,10 @@ namespace CameraSystem {
 
             if (allowRotation) {
                 HandleCameraRotation();
+            }
+
+            if (allowZoom) {
+                HandleCameraZoom();
             }
         }
 
@@ -93,6 +117,21 @@ namespace CameraSystem {
 
             Vector3 moveDir = transform.forward * inputDir.z + transform.right * inputDir.x;
             transform.position += moveDir * moveSpeed * Time.deltaTime;
+        }
+
+        private void HandleCameraZoom()
+        {
+            if (Input.mouseScrollDelta.y > 0) {
+                targetFieldOfView += 5;
+            }
+
+            if (Input.mouseScrollDelta.y < 0) {
+                targetFieldOfView -= 5;
+            }
+
+            targetFieldOfView = Mathf.Clamp(targetFieldOfView, fovMin, fovMax);
+
+            virtualCamera.m_Lens.FieldOfView = targetFieldOfView;
         }
     }
 }
