@@ -4,6 +4,7 @@ using static Cinemachine.CinemachineTransposer;
 
 // Make sure that the Cinemachine camera prefab has "Save During Play" enabled.
 // The changes to transposer and composer will be saved if they are already present.
+// Remember to adjust the damping and other settings.
 
 
 namespace CameraSystem {
