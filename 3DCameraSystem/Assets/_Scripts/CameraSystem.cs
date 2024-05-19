@@ -56,6 +56,8 @@ namespace CameraSystem {
 
         private void HandleEdgeScrolling()
         {
+            if (dragPanActive) return;
+    
             Vector3 inputDir = new Vector3(0, 0, 0);
 
             if (Input.mousePosition.x < edgeScrollSize) inputDir.x = -1f;
