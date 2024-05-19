@@ -3,7 +3,7 @@ using Cinemachine;
 using static Cinemachine.CinemachineTransposer;
 
 // Make sure that the Cinemachine camera prefab has "Save During Play" enabled.
-// The changes to transposer will be made only if transposer is already present.
+// The changes to transposer and composer will be saved if they are already present.
 
 
 namespace CameraSystem {
@@ -23,6 +23,8 @@ namespace CameraSystem {
             CinemachineTransposer transposer = camera.GetCinemachineComponent<CinemachineTransposer>();
 
             if (transposer == null) {
+                print("Transposer is missing. The changes made to transposer during play will not be saved.\nAdding transposer. Remember to save Cinemachine as a prefab while in play mode to keep the new component.");
+
                 camera.AddCinemachineComponent<CinemachineTransposer>();
                 transposer = camera.AddCinemachineComponent<CinemachineTransposer>();
                 transposer.m_BindingMode = BindingMode.LockToTargetWithWorldUp;
@@ -32,6 +34,7 @@ namespace CameraSystem {
             // Add Cinemachine Composer if not present
             CinemachineComposer composer = camera.GetCinemachineComponent<CinemachineComposer>();
             if (composer == null) {
+                print("Composer is missing. The changes made to composer during play will not be saved.\nAdding composer. Remember to save Cinemachine as a prefab while in play mode to keep the new component.");
                 camera.AddCinemachineComponent<CinemachineComposer>();
             }
         }
