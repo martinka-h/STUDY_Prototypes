@@ -44,3 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be015ae4fd48dff4d84c77a86fb53dbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 50
+  rotateSpeed: 50
+  edgeScrollSize: 10
+  dragPanSpeed: 0.2
+  useEdgeScrolling: 0
+  allowRotation: 1

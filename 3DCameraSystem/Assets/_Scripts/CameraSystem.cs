@@ -9,29 +9,68 @@ namespace CameraSystem {
         [SerializeField] private float dragPanSpeed = 0.2f;
 
         [SerializeField] private bool useEdgeScrolling = true;
-        
+        [SerializeField] private bool allowRotation = true;
+        [SerializeField] private bool useDragPan = true;
+
         private bool dragPanActive = false;
         private Vector2 lastMousePosition;
 
         private void Update()
         {
-            Vector3 inputDir = new Vector3(0, 0, 0);
+            HandleCameraMovement();
 
-            // edge scrolling
-            if (useEdgeScrolling) {
-                if (Input.mousePosition.x < edgeScrollSize) inputDir.x = -1f;
-                if (Input.mousePosition.y < edgeScrollSize) inputDir.z = -1f;
-                if (Input.mousePosition.x > Screen.width - edgeScrollSize) inputDir.x = +1f;
-                if (Input.mousePosition.y > Screen.height - edgeScrollSize) inputDir.z += +1f;
+            if (useDragPan) {
+                HandleDragPan();
             }
 
-            // move
+            if (useEdgeScrolling) {
+                HandleEdgeScrolling();
+            }
+
+            if (allowRotation) {
+                HandleCameraRotation();
+            }
+        }
+
+        private void HandleCameraMovement()
+        {
+            Vector3 inputDir = new Vector3(0, 0, 0);
+
             if (Input.GetKey(KeyCode.W)) inputDir.z = +1f;
             if (Input.GetKey(KeyCode.A)) inputDir.x = -1f;
             if (Input.GetKey(KeyCode.S)) inputDir.z = -1f;
             if (Input.GetKey(KeyCode.D)) inputDir.x = +1f;
 
-            // drag pan
+            Vector3 moveDir = transform.forward * inputDir.z + transform.right * inputDir.x;
+            transform.position += moveDir * moveSpeed * Time.deltaTime;
+        }
+
+        private void HandleCameraRotation()
+        {
+            float rotateDir = 0f;
+            if (Input.GetKey(KeyCode.Q)) rotateDir = +1f;
+            if (Input.GetKey(KeyCode.E)) rotateDir = -1f;
+
+            transform.eulerAngles += new Vector3(0, rotateDir * rotateSpeed * Time.deltaTime, 0);
+        }
+
+        private void HandleEdgeScrolling()
+        {
+            Vector3 inputDir = new Vector3(0, 0, 0);
+
+            if (Input.mousePosition.x < edgeScrollSize) inputDir.x = -1f;
+            if (Input.mousePosition.y < edgeScrollSize) inputDir.z = -1f;
+            if (Input.mousePosition.x > Screen.width - edgeScrollSize) inputDir.x = +1f;
+            if (Input.mousePosition.y > Screen.height - edgeScrollSize) inputDir.z += +1f;
+
+            Vector3 moveDir = transform.forward * inputDir.z + transform.right * inputDir.x;
+            transform.position += moveDir * moveSpeed * Time.deltaTime;
+        }
+
+        private void HandleDragPan()
+        {
+            Vector3 inputDir = new Vector3(0, 0, 0);
+
             if (Input.GetMouseButtonDown(1)) {
                 dragPanActive = true;
                 lastMousePosition = Input.mousePosition;
@@ -50,16 +89,8 @@ namespace CameraSystem {
                 lastMousePosition = Input.mousePosition;
             }
 
-            // the following two lines have to be bellow drag pan, move and edge scrolling
             Vector3 moveDir = transform.forward * inputDir.z + transform.right * inputDir.x;
             transform.position += moveDir * moveSpeed * Time.deltaTime;
-
-            // rotate
-            float rotateDir = 0f;
-            if (Input.GetKey(KeyCode.Q)) rotateDir = +1f;
-            if (Input.GetKey(KeyCode.E)) rotateDir = -1f;
-
-            transform.eulerAngles += new Vector3(0, rotateDir * rotateSpeed * Time.deltaTime, 0);
         }
     }
 }
