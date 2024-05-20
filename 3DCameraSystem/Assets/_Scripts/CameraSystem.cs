@@ -7,25 +7,29 @@ namespace CameraSystem {
         [SerializeField] private CinemachineVirtualCamera virtualCamera;
         private CinemachineTransposer transposer;
 
+        [Header("Camera Movement Settings")]
         [SerializeField] private float moveSpeed = 50f;
         [SerializeField] private float rotateSpeed = 50f;
         [SerializeField] private int edgeScrollSize = 10;
-        [SerializeField] private float dragPanSpeed = 0.2f;
         [SerializeField] private float zoomSpeed = 5f;
 
+        [Header("Disable/ enable functionality")]
         [SerializeField] private bool useEdgeScrolling;
-        [SerializeField] private bool allowRotation;
         [SerializeField] private bool useDragPan;
+        [SerializeField] private bool allowRotation;
         [SerializeField] ZoomOptions zoom;
 
-
+        [Header("Drag pan")]
+        [SerializeField] private float dragPanSpeed = 0.2f;
         private bool dragPanActive = false;
         private Vector2 lastMousePosition;
 
+        [Header("Camera zoom - Field of view")]
         [SerializeField] private int fovMin = 10;
         [SerializeField] private int fovMax = 50;
         private float targetFieldOfView = 30;
 
+        [Header("Camera zoom - Move forward/ backward")]
         [SerializeField] private float followOffsetMin = 10f;
         [SerializeField] private float followOffsetMax = 50f;
         [SerializeField] private float zoomAmout = 3f;
