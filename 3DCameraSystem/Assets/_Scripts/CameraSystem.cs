@@ -5,6 +5,7 @@ namespace CameraSystem {
     public class CameraSystem : MonoBehaviour {
 
         [SerializeField] private CinemachineVirtualCamera virtualCamera;
+        private CinemachineTransposer transposer;
 
         [SerializeField] private float moveSpeed = 50f;
         [SerializeField] private float rotateSpeed = 50f;
@@ -15,14 +16,20 @@ namespace CameraSystem {
         [SerializeField] private bool useEdgeScrolling;
         [SerializeField] private bool allowRotation;
         [SerializeField] private bool useDragPan;
-        [SerializeField] private bool allowZoom;
+        [SerializeField] ZoomOptions zoom;
+
 
         private bool dragPanActive = false;
         private Vector2 lastMousePosition;
 
-        [SerializeField] private int fovMax = 50;
         [SerializeField] private int fovMin = 10;
+        [SerializeField] private int fovMax = 50;
         private float targetFieldOfView = 30;
+
+        [SerializeField] private float followOffsetMin = 10f;
+        [SerializeField] private float followOffsetMax = 50f;
+        [SerializeField] private float zoomAmout = 3f;
+        private Vector3 followOffset;
 
         private void Start()
         {
@@ -33,6 +40,19 @@ namespace CameraSystem {
 
             if (virtualCamera == null) {
                 Debug.Log("CinemachineVirtualCamera not found.");
+            }
+
+            if (zoom == ZoomOptions.FieldOfViewZoom || zoom == ZoomOptions.MoveForwardZoom) {
+                transposer = virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
+                followOffset = transposer.m_FollowOffset;
+
+                if (followOffset.y < followOffsetMin) {
+                    Debug.Log("Your minimum follow offset is larger than default follow offset.");
+                }
+
+                if (followOffset.y > followOffsetMax) {
+                    Debug.Log("Your maximum follow offset is smaller than default follow offset");
+                }
             }
         }
 
@@ -52,8 +72,10 @@ namespace CameraSystem {
                 HandleCameraRotation();
             }
 
-            if (allowZoom) {
-                HandleCameraZoom_FieldOfView();
+            switch (zoom) {
+                case ZoomOptions.NoZoom: return;
+                case ZoomOptions.FieldOfViewZoom: HandleCameraZoom_FieldOfView(); break;
+                case ZoomOptions.MoveForwardZoom: HandleCameraZoom_MoveForward(); break;
             }
         }
 
@@ -134,5 +156,30 @@ namespace CameraSystem {
 
             virtualCamera.m_Lens.FieldOfView = Mathf.Lerp(virtualCamera.m_Lens.FieldOfView, targetFieldOfView, Time.deltaTime * zoomSpeed);
         }
+
+        private void HandleCameraZoom_MoveForward()
+        {
+            Vector3 zoomDir = followOffset.normalized;
+
+            if (Input.mouseScrollDelta.y > 0) {
+                followOffset -= zoomDir * zoomAmout;
+            } else if (Input.mouseScrollDelta.y < 0) {
+                followOffset += zoomDir * zoomAmout;
+            }
+
+            if (followOffset.magnitude < followOffsetMin) {
+                followOffset = zoomDir * followOffsetMin;
+            } else if (followOffset.magnitude > followOffsetMax) {
+                followOffset = zoomDir * followOffsetMax;
+            }
+
+            transposer.m_FollowOffset = Vector3.Lerp(transposer.m_FollowOffset, followOffset, Time.deltaTime * zoomSpeed);
+        }
+    }
+
+    public enum ZoomOptions {
+        NoZoom,
+        FieldOfViewZoom,
+        MoveForwardZoom
     }
 }
