@@ -6,6 +6,7 @@ namespace CameraSystem {
 
         [SerializeField] private CinemachineVirtualCamera virtualCamera;
         private CinemachineTransposer transposer;
+        private Vector3 followOffset;
 
         [Header("Camera Movement Settings")]
         [SerializeField] private float moveSpeed = 50f;
@@ -33,7 +34,11 @@ namespace CameraSystem {
         [SerializeField] private float followOffsetMin = 10f;
         [SerializeField] private float followOffsetMax = 50f;
         [SerializeField] private float zoomAmout = 3f;
-        private Vector3 followOffset;
+
+        [Header("Camera zoom - Lower y")]
+        [SerializeField] private float followOffsetMinY = 10f;
+        [SerializeField] private float followOffsetMaxY = 50f;
+
 
         private void Start()
         {
@@ -46,7 +51,7 @@ namespace CameraSystem {
                 Debug.Log("CinemachineVirtualCamera not found.");
             }
 
-            if (zoom == ZoomOptions.FieldOfViewZoom || zoom == ZoomOptions.MoveForwardZoom) {
+            if (zoom == ZoomOptions.FieldOfViewZoom || zoom == ZoomOptions.MoveForwardZoom || zoom == ZoomOptions.LowerYZoom) {
                 transposer = virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
                 followOffset = transposer.m_FollowOffset;
 
@@ -80,6 +85,7 @@ namespace CameraSystem {
                 case ZoomOptions.NoZoom: return;
                 case ZoomOptions.FieldOfViewZoom: HandleCameraZoom_FieldOfView(); break;
                 case ZoomOptions.MoveForwardZoom: HandleCameraZoom_MoveForward(); break;
+                case ZoomOptions.LowerYZoom: HandleCameraZoom_LowerY(); break;
             }
         }
 
@@ -179,11 +185,24 @@ namespace CameraSystem {
 
             transposer.m_FollowOffset = Vector3.Lerp(transposer.m_FollowOffset, followOffset, Time.deltaTime * zoomSpeed);
         }
+
+        private void HandleCameraZoom_LowerY()
+        {
+            if (Input.mouseScrollDelta.y > 0) {
+                followOffset.y -=  zoomAmout;
+            } else if (Input.mouseScrollDelta.y < 0) {
+                followOffset.y +=  zoomAmout;
+            }
+
+            followOffset.y = Mathf.Clamp(followOffset.y, followOffsetMin, followOffsetMax);
+            transposer.m_FollowOffset = Vector3.Lerp(transposer.m_FollowOffset, followOffset, Time.deltaTime * zoomSpeed);
+        }
     }
 
     public enum ZoomOptions {
         NoZoom,
         FieldOfViewZoom,
-        MoveForwardZoom
+        MoveForwardZoom,
+        LowerYZoom
     }
 }
