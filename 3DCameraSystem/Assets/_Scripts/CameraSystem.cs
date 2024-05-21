@@ -194,7 +194,7 @@ namespace CameraSystem {
                 followOffset.y +=  zoomAmout;
             }
 
-            followOffset.y = Mathf.Clamp(followOffset.y, followOffsetMin, followOffsetMax);
+            followOffset.y = Mathf.Clamp(followOffset.y, followOffsetMinY, followOffsetMaxY);
             transposer.m_FollowOffset = Vector3.Lerp(transposer.m_FollowOffset, followOffset, Time.deltaTime * zoomSpeed);
         }
     }
